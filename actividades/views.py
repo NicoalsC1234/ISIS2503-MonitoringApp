@@ -13,18 +13,18 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from .logic.logic_reportes import create_reportes, get_reportes
+from .logic.logic_actividades import create_actividades, get_actividades
 
-def reportes_list(request):
-    reportes = get_reportes()
+def actividades_list(request):
+    actividades = get_actividades()
     context = {
-        'reportes_list': reportes
+        'actividades_list': actividades
     }
-    return render(request, 'Reportes/actividades.html', context)
+    return render(request, 'Actividades/actividades.html', context)
 
-def reportes_create(request):
+def actividades_create(request):
     response = HttpResponse(content_type= 'application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=Sprint2-student-report.pdf'
+    response['Content-Disposition'] = 'attachment; filename=Sprint2-student-assignments.pdf'
 
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize =A4)
@@ -41,13 +41,10 @@ def reportes_create(request):
 
     numero = Paragraph('''No.''',styleBH)
     alumno = Paragraph('''Alumno''',styleBH)
-    b1 = Paragraph('''Materia1''',styleBH)
-    b2 = Paragraph('''Materia2''', styleBH)
-    b3 = Paragraph('''Materia3''', styleBH)
-    total = Paragraph('''TOTAL''', styleBH)
-    data = [[numero,alumno,b1,b2,b3,total]]
+    b1 = Paragraph('''Actividad1''',styleBH)
+    data = [[numero,alumno,b1]]
 
-    alumnos = [{'#':'1','nombre':'Nicolas Chalee Guerrero', 'b1':'3.4','b2':'2.2','b3':'4.5','total':'3.36'}]
+    alumnos = [{'#':'1','nombre':'Nicolas Chalee Guerrero', 'b1':'Leer 10 paginas del libro'}]
 
     styles = getSampleStyleSheet()
     styleN = styles["BodyText"]
@@ -57,7 +54,7 @@ def reportes_create(request):
     width, height = A4
     high = 650
     for student in alumnos:
-        this_student = [student['#'],student['nombre'],student['b1'], student['b2'],student['b3'],student['total']]
+        this_student = [student['#'],student['nombre'],student['b1']]
         data.append(this_student)
         high = high -18
 
@@ -73,4 +70,4 @@ def reportes_create(request):
     buffer.close()
     response.write(pdf)
     return response
-    return render(request, 'Reportes/actividadesCreate.html', context)
+    return render(request, 'Actividades/actividadesCreate.html', context)

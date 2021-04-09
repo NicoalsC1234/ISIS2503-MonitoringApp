@@ -1,7 +1,7 @@
-from ..models import reportes
+from ..models import Reportes
 
 def get_reportes():
-    queryset = Reportes.objects.all().order_by('-dateTime')[:10]
+    queryset = Reportes.objects.all()
     return (queryset)
 
 def create_reportes(form):
